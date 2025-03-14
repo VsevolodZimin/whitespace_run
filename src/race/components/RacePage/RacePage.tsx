@@ -19,7 +19,7 @@ function RacePage(){
                         })}
                     </div>
                 </div>
-                <div ref={finishLineRef} id="finish-line" className={styles['finish-line']}></div>
+                <div ref={finishLineRef} className={styles['finish-line']}></div>
             </div>
             <pre ref={borderBottomRef} id="border"></pre>
         </div>

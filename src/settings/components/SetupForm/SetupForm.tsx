@@ -15,7 +15,7 @@ function SetupForm({ children } : { children?: React.ReactNode }){
                     <label className="hidden" htmlFor="distance-field">Distance:</label>
                     <DistanceInput/>
                     { children ? children : null }                
-                    </div>
+                </div>
                 <ErrorMessage/>
                 <AddButton/>
             </div>

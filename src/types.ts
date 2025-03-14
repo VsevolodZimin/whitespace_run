@@ -2,7 +2,7 @@ import React from "react"
 
 export type Reff<T> = React.MutableRefObject<T>;
 export type Setter<T> = React.Dispatch<React.SetStateAction<T>>;
-export type MEvent = React.MouseEvent<HTMLButtonElement, MouseEvent>;
+export type MEvent = React.MouseEvent<HTMLButtonElement | HTMLPreElement, MouseEvent>;
 export type SetupPageProps = {
     settings: GlobalSettings,
     setSettings: Setter<GlobalSettings>,
@@ -73,7 +73,6 @@ export type RacerSettings = {
     id: string,
     faceIndex: number
     name: string;
-    racerField: HTMLDivElement | null,
 }
 
 export type GlobalSettings = {
@@ -139,6 +138,7 @@ export type GameContextType = {
     wagnerAudio: Reff<HTMLAudioElement>,
     rossiniAudio: Reff<HTMLAudioElement>,
     mediaQuery: MediaQueryList,
+    racerFields: React.MutableRefObject<Map<string, Reff<HTMLDivElement | null>>>
 }
 
 export type GOOOO = {
@@ -170,7 +170,7 @@ export type SetupContext = {
     errorMessageRef: React.RefObject<HTMLDivElement>, 
     handleCreate:  (e: MEvent, id: string, faceIndex: number) => void, 
     handleDistanceInput: (e: React.ChangeEvent<HTMLInputElement>) => void, 
-    handleDelete: (e: React. MouseEvent<HTMLButtonElement, MouseEvent>, id: string, lineRef: Reff<HTMLDivElement | null>) => void, 
+    handleDelete: (e: React. MouseEvent<HTMLButtonElement | HTMLPreElement, MouseEvent>, id: string, lineRef: Reff<HTMLDivElement | null>) => void, 
     handleRun: (e: MEvent) => void,
     handleRandom: (id: string, nameInputRef: Reff<HTMLInputElement | null>) => void, 
     handleNameInput: (id: string, e: React.ChangeEvent<HTMLInputElement | null>) => void,

@@ -12,10 +12,9 @@ function Racer({ id, name, faceIndex }: RacerProps){
     const { setImgLoaded  } = useRaceContext();
 
     const { blockRef, faceRef, nameRef, trackRef, rankRef } = useRacer(id, name, faceIndex);
-    
 
     return(
-        <div className={styles.flex}>
+        <div>
             <div ref={trackRef} id="track" className={styles.track}>
                 <div ref={blockRef} className={styles['racer-block']}>
                     <pre ref={faceRef} id="face">

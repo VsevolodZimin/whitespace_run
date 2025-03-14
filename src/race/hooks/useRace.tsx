@@ -26,10 +26,13 @@ function useRace() {
     const racerCountRef = useRef({ finished: 0 });
     const winner = useRef("");
     
+    
     useEffect(()=>{
         if(!backdropRef.current) throw new Error("backdropRed is null");
         if(!finishLineRef.current) throw new Error("finishLineRef is null");
         if(!raceAreaRef.current) throw new Error("raceAreaRef is null");
+
+        finishLineRef.current.style.backgroundImage = `url('${config.getImgPath('finishPattern.png')}')`;
 
         if(isRacersRegistered) {
             if(!settings.composer || settings.composer && isImgLoaded){
@@ -176,7 +179,7 @@ function useRace() {
         setRaceOver(false);
         setNumRegistered(0);
         setDoneSettingUp(false);
-        raceDataRef.current = new Map<string, racerData>([]);
+        raceDataRef.current = new Map<string, RacerData>([]);
     }
     
 

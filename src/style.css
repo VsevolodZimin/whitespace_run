@@ -23,24 +23,15 @@
 
 html {
     font-size: 10px;
-    min-width: 100vw;
 }
 
 body {
-
-    /* min-height: 100%; */
-    /* max-height: 150vh; */
     position: relative;
-    width: 100%;
     background-color:rgb(211, 211, 182);
-    /* color: white; */
-    
 }
 
 #root {
     position: relative;
-    /* min-height: 100%;
-    min-height: 100vh; */
 }
 
 input {
@@ -76,7 +67,6 @@ button {
 
 .flex {
     display: flex;
-    overflow-x: hidden;
 }
 
 .no-overflow {

@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useName } from "../../game/hooks/useName";
 import { config } from "../../../config";
 import { useSetupAnimation } from "./useSetupAnimation";
-import { calculateHeightFromDims, getFieldByID } from "../../game/utils";
+import { calculateHeightFromDims } from "../../game/utils";
 import { useGameContext } from "../../game/context/GameContext";
 import { useAnimation } from "../../game/hooks/useAnimation";
 import { useScroll } from "../../game/hooks/useScroll";
@@ -10,7 +10,7 @@ import { MEvent, Reff } from "../../types";
 
 function useSettingsPage(){
 
-    const {settings, setDoneSettingUp,  backdropRef, setSettings, isRestartedRef, mediaQuery} = useGameContext();
+    const {settings, setDoneSettingUp,  backdropRef, setSettings, isRestartedRef, mediaQuery, racerFields} = useGameContext();
     const { getRandomName } = useName(); 
     const okRef = useRef(false); 
     const whitespaceRef = useRef<HTMLSpanElement | null>(null); 
@@ -26,8 +26,9 @@ function useSettingsPage(){
     const racerListHeaderRef = useRef<HTMLDivElement | null>(null);
     const hasAudioLoadedRef = useRef(false);
     const isErrorMessageShown = useRef(false);
-    const { animateDelete, animateCreate, animateLoading, animateRandom, animateShowErrorMessage, animateHideErrorMessage, animateLayout } = useSetupAnimation(isListLoadedRef, settings);
+    const { animateDelete, animateCreate, animateLoading, animateRandom, animateShowErrorMessage, animateHideErrorMessage, animateLayout } = useSetupAnimation(isListLoadedRef);
     const { getAnimation } = useAnimation();
+    const { setup, timing } = getAnimation('delete-icon');
     const { scrollListUpWithScrollEndEvent, cancelRequest } = useScroll(100);
     createAudio.current.volume = 0.26;
     deleteAudio.current.volume = 0.26;
@@ -154,28 +155,60 @@ function useSettingsPage(){
         }
     }
 
-    function handleDelete(e: MEvent, id: string, lineRef: Reff<HTMLDivElement | null>) {
-        const icon = e.target as HTMLImageElement;
-        const { setup, timing } = getAnimation('delete-icon');
-        if(!icon) throw new Error('icon is not found');
-        icon.animate(setup, timing);
 
+    function handleDelete(e: MEvent, id: string, lineRef: Reff<HTMLDivElement | null>) {
+        //Playing delete sound
+        deleteAudio.current.currentTime = 0
+        deleteAudio.current.play();
+
+        const icon = e.target as HTMLImageElement;
+        const toDeleteFieldRef = racerFields.current.get(id);
         const deleteButtons: HTMLButtonElement[] = Array.from(document.querySelectorAll(".delete-button"));
         const addButton: HTMLButtonElement | null = document.querySelector(".delete-button");
+
+        if(!icon) throw new Error('icon is not found');
         if(!addButton) throw new Error('addButton not found');
+        if(!toDeleteFieldRef) throw new Error('No ref found by this id');
+        if(!toDeleteFieldRef.current) throw new Error('toDeleteFieldRef is null');
+        
+        const toDeleteField = toDeleteFieldRef.current;
+        const toDeletePosition = toDeleteField.dataset.position;
+        
+        //Deleting racer item from ref map
+        racerFields.current.delete(id);
+
+        //Updateing positions for the remaining items 
+        let position = 1;
+        racerFields.current.forEach((field, id) => {
+            if(!field.current) throw new Error('Error');
+            field.current.dataset.position = String(position++);
+        })
+                
+        //Running delete icon animation
+        icon.animate(setup, timing);
+        
+        //Blocking "delete" and "add" buttons until animation is done
         deleteButtons.forEach(button => button.disabled = true);
         addButton.disabled = true;
-        // hasAudioLoadedRef.current && deleteAudio.current.pause();
-        const toDeleteField = getFieldByID(id, settings.racerSettings);
-        const position = Number(toDeleteField.dataset.position);
 
-        deleteAudio.current.currentTime = 0
-        deleteAudio.current.play().then(_ => {
-            hasAudioLoadedRef.current = true;
-        });
+        //Running delete animation
         const animationPromise = animateDelete(toDeleteField, lineRef);
+        
+        //Once animation finishes...
         animationPromise.then(_ => {
-            updateUI(id, position);
+
+            const count = settings.racerSettings.length;
+
+            //If deleted the last item - scroll up and when the and then resolve, otherwise - return resolved promise
+            const scrollPromise = scrollListUpWithScrollEndEvent(calculateHeightFromDims(settings.fieldHeightProperties), Number(toDeletePosition) === count);
+            scrollPromise.then(() => {
+            
+            //Deleteing racer item from settings 
+                let newRacerSettings = settings.racerSettings.filter(rnStgs => rnStgs.id !== id);
+                setSettings(oldSettings => ({...oldSettings, racerSettings: newRacerSettings }));
+                cancelRequest();
+            })
+            TODO: //Enable add button (better later as there is still chance that the effect will run before re-rendering finishes)
             addButton.disabled = false;
         });
     }
@@ -284,27 +317,6 @@ function useSettingsPage(){
                 }
             });
         }
-    }
-
-
-
-    function updateUI(id: string, position: number){
-        const count = settings.racerSettings.length;
-        let newRacerSettings = settings.racerSettings.filter(rnStgs => rnStgs.id !== id);
-        let newRunner;
-
-        newRacerSettings = newRacerSettings.map((rnStgs, index) => {
-            newRunner = {...rnStgs};
-            if(!newRunner.racerField) throw new Error("racerField is null");
-            newRunner.racerField.dataset.position = String(index + 1); 
-            return newRunner;
-        });
-        
-        const scrollPromise = scrollListUpWithScrollEndEvent(calculateHeightFromDims(settings.fieldHeightProperties), position === count);
-        scrollPromise.then(() => {
-            setSettings(oldSettings => ({...oldSettings, racerSettings: newRacerSettings }));
-            cancelRequest();
-        })
     }
 
     return { errorMessageRef, 

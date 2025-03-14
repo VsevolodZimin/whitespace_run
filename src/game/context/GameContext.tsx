@@ -23,6 +23,7 @@ export function GameProvider({ children }: { children: React.ReactNode }){
       wagnerAudio,
       rossiniAudio,
       mediaQuery,
+      racerFields,
     } = useGame();
 
     return (
@@ -42,6 +43,7 @@ export function GameProvider({ children }: { children: React.ReactNode }){
           wagnerAudio,
           rossiniAudio,
           mediaQuery,
+          racerFields,
         }}>
             { children }
         </GameContext.Provider>

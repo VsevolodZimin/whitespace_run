@@ -2,13 +2,12 @@
     border: none;
     width: 2.6rem;
     height: 100vh;
-    background-image: url("./assets/img/finishPattern.png");
     background-repeat: repeat;
     writing-mode: vertical-lr;
 }
 
 .game-page {
-    width: 100%;
+    width: fit-content;
     z-index: 100;
     position: relative;
     display: flex; 

@@ -6,8 +6,9 @@ export function generateId(){
     return crypto.randomUUID();
 }
 
-export function initFieldDimentions(field: HTMLDivElement){
-    const fieldComputedStyles = getComputedStyle(field);
+export function initFieldDimentions(fieldRef: Reff<HTMLDivElement | null>){
+    if(!fieldRef.current) throw new Error('fieldRef is null');
+    const fieldComputedStyles = getComputedStyle(fieldRef.current);
 
     return {
         height: parseFloat(fieldComputedStyles.height),
@@ -50,16 +51,17 @@ export function calculateWidth(el: Element | null){
     + parseFloat(elStyles.marginRight) 
 }
 
-export function getFieldByID(id: string, racerSettings: RacerSettings[]){
-    const rnStgs = racerSettings.find(rnStgs => {
-        if(!rnStgs.racerField) throw new Error("A nullish racer field in the array");
-        return rnStgs.id ===  id
-    });
+// export function getFieldByID(id: string, racerSetupItemRef: Reff<HTMLDivElement | null>){
+//     if(!racerSetupItemRef) throw new Error('racerSetupItemRef is null');
+//     const rnStgs = racerSettings.find(rnStgs => {
+//         if(!rnStgs.racerField) throw new Error("A nullish racer field in the array");
+//         return rnStgs.id ===  id
+//     });
 
-    if(!rnStgs) throw new Error('No settings with this ID');
-    if(!rnStgs.racerField) throw new Error('racerField is null');
-    return rnStgs.racerField;
-}
+//     if(!rnStgs) throw new Error('No settings with this ID');
+//     if(!rnStgs.racerField) throw new Error('racerField is null');
+//     return rnStgs.racerField;
+// }
 
 export function justifyInitialFacePosition(raceDataRef: Reff<Map<string, RacerData>>){
     let max = -1
@@ -81,6 +83,17 @@ export function justifyInitialFacePosition(raceDataRef: Reff<Map<string, RacerDa
             blockEl.style.transform = `translateX(${offset}px)`;
             racerData.blockPositionRef.current += offset;
         }
+    });
+}
+
+export function extractDOMItems(racerFields: Reff<Map<string, Reff<HTMLDivElement | null>>>){
+    return Array
+    .from(racerFields.current.entries())
+    .map(entry => entry[1])
+    .map(itemRef => itemRef.current)
+    .map(item => {
+        if(!item) throw new Error('item is null');
+        else return item;
     });
 }
 

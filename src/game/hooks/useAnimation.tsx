@@ -1,4 +1,4 @@
-import { AnimationTiming, RacerFieldDimentions } from "../../types";
+import { AnimationTiming, HeightDimentions } from "../../types";
 import { deleteIconWidth } from "../utils";
 
 
@@ -308,7 +308,7 @@ function useAnimation(){
     }
 
 
-    function getHeightSquishAnimation(dims: RacerFieldDimentions){
+    function getHeightSquishAnimation(dims: HeightDimentions){
         const setup = [
             { 
                 borderTop: `${dims.borderTop}px`,

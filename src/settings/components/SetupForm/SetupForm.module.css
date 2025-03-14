@@ -1,7 +1,6 @@
 .distance-group {
     display: flex;
     flex-flow: column;
-    width: 100%;
 }
 
 .distance-group-top-row {
@@ -10,7 +9,6 @@
 }
 
 form {
-    width: 100%;
     padding: 2rem;
 }
 

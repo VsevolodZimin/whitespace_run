@@ -1,11 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useEventListener } from "../../game/hooks/useEventListener";
 import { GlobalSettings, MoveUpAnimationMap, Reff } from "../../types";
-import { calculateWidth } from "../../game/utils";
+import { calculateWidth, extractDOMItems } from "../../game/utils";
 import { useAnimation } from "../../game/hooks/useAnimation";
-import { config } from "../../../config";
+import { useGameContext } from "../../game/context/GameContext";
+import { useSetupContext } from "../context/SetupContext";
 
-function useSetupAnimation(isListLoadedRef: Reff<boolean>, settings: GlobalSettings ){
+function useSetupAnimation(isListLoadedRef: React.MutableRefObject<boolean>){
+
+    const { settings, racerFields } = useGameContext(); 
 
     const { getAnimation, getHeightSquishAnimation, getWidthSquishAnimation, getWidthUnsquishAnimation, getGapSquishAnimation, getGapUnsquishAnimation } = useAnimation();
 
@@ -68,13 +71,11 @@ function useSetupAnimation(isListLoadedRef: Reff<boolean>, settings: GlobalSetti
     }
 
     function animateLoading(index: number){   
-        const fields = settings.racerSettings.map(rnStgs => {
-            if(!rnStgs.racerField) throw new Error("A nullish racer field in the array")
-            return rnStgs.racerField
-        });
-        if(index < fields.length){
+        const items = extractDOMItems(racerFields)
+
+        if(index < items.length){
             const { setup, timing } = getAnimation("create");
-            const createAnimation = fields[index].animate(setup, timing);
+            const createAnimation = items[index].animate(setup, timing);
             createAnimation.finished.then((anmt) => {
                 anmt.commitStyles();
                 anmt.cancel();
@@ -118,9 +119,9 @@ function useSetupAnimation(isListLoadedRef: Reff<boolean>, settings: GlobalSetti
     }
     
     function animateRandom(id: string){
-        const field = settings.racerSettings.find(rnStgs => rnStgs.id === id);
-        if(!field || !field.racerField) throw new Error("field with this id not found or its racerField property is null");
-        const icon = field.racerField?.querySelector('.random-icon');
+        const field = racerFields.current.get(id)?.current;
+        if(!field) throw new Error("field with this id not found or its racerField property is null");
+        const icon = field.querySelector('.random-icon');
         if(!icon) throw new Error("icon is not found");
         const { setup, timing } = getAnimation('rotate');
         const randomAnimation = icon.animate(setup, timing);
