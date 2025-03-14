@@ -1,0 +1,48 @@
+.end-game-button-group {
+    display: flex;
+    flex-flow: column;
+    /* justify-content: center; */
+    box-sizing: border-box;
+    width: 100%;
+    align-self: center;
+    gap: 1rem;
+}
+
+.end-game-button {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.dialog {
+    width: 60%;
+    position: fixed;
+    top: 0;
+    transform: translateY(-100%);
+    left: 1%;
+    background-color:rgb(211, 211, 182);
+    border: none;
+    text-align: center;
+    line-height: 1.4;
+    border-end-end-radius: 1rem;
+    border-end-start-radius: 1rem;
+    padding: 2rem 2rem;
+    border: 3px rgb(84, 50, 19) solid;
+    border-top: none;
+}
+
+.dialog-body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    gap: 1rem;
+    /* justify-content: end; */
+    overflow-wrap: break-word;
+}
+
+.text {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+}

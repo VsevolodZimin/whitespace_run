@@ -1,0 +1,5 @@
+function TabletLayout(){
+     
+}
+
+export { TabletLayout }

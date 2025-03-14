@@ -1,0 +1,16 @@
+.distance-group {
+    display: flex;
+    flex-flow: column;
+    width: 100%;
+}
+
+.distance-group-top-row {
+    display: flex;
+    gap: 0.8rem;
+}
+
+form {
+    width: 100%;
+    padding: 2rem;
+}
+

@@ -1,0 +1,30 @@
+.face {
+    width: fit-content; 
+    position: relative;
+}
+
+.track { 
+    padding-top: 1rem; 
+    padding-bottom: 1rem; 
+    border-bottom: 1px black dashed; 
+    width: 100%;
+    position: relative;
+}
+
+.rank {
+    position: absolute; 
+    transform: translateX(-100%); 
+}
+
+.racer-block {
+    display: flex;
+    flex-flow: column;
+    line-height: 2;
+    align-items: center;
+    width: fit-content;
+    position: relative;
+}
+
+.flex {
+    display: flex;
+}

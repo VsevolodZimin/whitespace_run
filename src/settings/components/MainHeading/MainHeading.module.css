@@ -1,0 +1,15 @@
+
+.run, .whitespace {
+    opacity: 0;
+    text-align: center;
+    font-size: 4.5rem;
+}
+
+.main-heading {
+    justify-content: center;
+    display: flex;
+    gap: 1.2rem;
+    font-variant: small-caps;
+    padding-top: 3rem;
+}
+

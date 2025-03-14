@@ -1,0 +1,14 @@
+{
+    "include": ["src", "vite-env.d.ts", "config.ts", "src/settings/hook"],
+    "compilerOptions": {
+      "jsx": "react-jsx",
+      "esModuleInterop": true,
+      "strict": true,
+      "types": ["vite/client"],
+      "lib": ["DOM", "DOM.Iterable", "ESNext"],
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "module": "ESNext",
+      "target": "ESNext"
+    }
+}

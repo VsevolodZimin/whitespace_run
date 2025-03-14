@@ -1,0 +1,17 @@
+.delete-button.squished {
+    width: 0px;
+}
+
+.delete-icon.squished {
+    width: 0px;
+}
+
+.delete-icon {
+    all: unset;
+    width: 2.8rem;
+    height: 2.8rem;
+}
+
+.delete-button {
+    all: unset;
+}

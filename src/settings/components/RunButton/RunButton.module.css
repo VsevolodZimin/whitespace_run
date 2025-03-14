@@ -1,0 +1,11 @@
+.left{
+    flex-grow: 0.1;
+    opacity: 1;
+    position: relative;
+    text-align: center;
+    flex-grow: 0.1;
+}
+
+.right{
+    
+}
